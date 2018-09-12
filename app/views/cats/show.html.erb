@@ -1,0 +1,20 @@
+
+<h1><%= @cat.name %></h1>
+
+<h3>Name: <%= @cat.name %></h3>
+<h3>Sex: <%= @cat.sex%></h3>
+<h3>Color: <%= @cat.color%></h3>
+<h3>Birth date: <%= @cat.birth_date%></h3>
+
+<p>
+  <%= @cat.description %>
+</p>
+
+<h3>Existing requests:</h3>
+
+<% CatRentalRequest.all.each do |request| %>
+  <% if request.cat_id == @cat.id %>
+    Start Date: <%= request.start_date %>
+    End Date: <%= request.end_date %>
+  <% end %>
+<% end %>
