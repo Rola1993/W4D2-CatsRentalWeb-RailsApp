@@ -2,10 +2,10 @@ class Cat < ApplicationRecord
   VALID_COLORS = ['BLACK', 'WHITE', 'BROWN', 'ORANGE']
   
   validates :name, :birth_date, :sex, :description, presence: true
-  validates :color, :inclusion => {:in => VALID_COLORS}, presence: true
-  validates :sex, :inclusion => {:in => ['M', 'F']}
+  validates :color, inclusion: VALID_COLORS
+  validates :sex, inclusion: %w(M F)
   
-  has_many :cat_rental_requests,
+  has_many :rental_requests,
   primary_key: :id,
   foreign_key: :cat_id,
   class_name: :CatRentalRequest,
