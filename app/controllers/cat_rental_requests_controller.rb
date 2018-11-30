@@ -1,17 +1,42 @@
 class CatRentalRequestsController < ApplicationController
   
   def new # The edit form tries to use a Cat's values to pre-fill the fields. The new form doesn't have an existing cat
-    @cat_rental_request = CatRentalRequest.new # build (but don't save) a blank Cat object in the #new action. Set this to @cat
-    render :new
+    @rental_request = CatRentalRequest.new # build (but don't save) a blank Cat object in the #new action. Set this to @cat
   end 
   
   def create
-    @cat_rental_request = CatRentalRequest.new(params.permit(:start_date, :end_date, :cat_id))
+    @rental_request = CatRentalRequest.new(cat_rental_request_params)
 
-    if @cat_rental_request.save
-      redirect_to cats_url
+    if @rental_request.save
+      redirect_to cat_url(@rental_request.cat)
     else
+      flash.now(:errors) = @rental_request.errors.full_messages
       render :new
     end
   end
+
+  def approve 
+    current_cat_rental_request.approve!
+    redirect_to cat_url(current_cat)
+  end 
+
+  def deny 
+    current_cat_rental_request.deny!
+    redirect_to cat_url(current_cat)
+  end 
+
+
+  private 
+  
+  def current_cat_rental_request 
+    @rental_request ||= CatRentalRequest.includes(:cat).find(params[:id])
+  end 
+
+  def current_cat  
+    current_cat_rental_request.cat 
+  end 
+
+  def cat_rental_request_params
+    params.require(:cat_rental_request).permit(:cat_id, :end_date, :start_date, :status)
+  end 
 end 

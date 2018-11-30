@@ -1,7 +1,7 @@
 class CatRentalRequest < ApplicationRecord
   VALID_STATUS = ['APPROVED', 'PENDING', 'DENIED']
   
-  validates :start_date, :end_date, presence: true
+  validates :cat_id, :start_date, :end_date, presence: true
   validate :does_not_overlap_approved_request
   validates :status, :inclusion => {:in => VALID_STATUS}, presence: true
   
